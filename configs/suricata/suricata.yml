@@ -1,0 +1,83 @@
+%YAML 1.1
+---
+
+vars:
+  address-groups:
+    HOME_NET: "[172.16.0.0/12,192.168.0.0/16,10.0.0.0/8]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS: "80"
+    SHELLCODE_PORTS: "!80"
+    ORACLE_PORTS: 1521
+    SSH_PORTS: 22
+
+default-log-dir: /var/log/suricata
+
+af-packet:
+  - interface: eth0
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+  - interface: eth1
+    cluster-id: 98
+    cluster-type: cluster_flow
+    defrag: yes
+
+pcap:
+  - interface: eth0
+  - interface: eth1
+
+outputs:
+  - fast:
+      enabled: yes
+      filename: fast.log
+      append: yes
+
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      community-id: yes
+      types:
+        - alert:
+            payload: yes
+            packet: yes
+            metadata: yes
+            tagged-packets: yes
+        - http:
+            extended: yes
+        - dns:
+            query: yes
+            answer: yes
+        - tls:
+            extended: yes
+        - files:
+            force-magic: no
+        - drop:
+        - ssh
+        - flow
+
+logging:
+  default-log-level: notice
+
+detect:
+  profile: medium
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+      libhtp:
+        default-config:
+          personality: IDS
+          request-body-limit: 100kb
+          response-body-limit: 100kb
+          request-body-minimal-inspect-size: 32kb
+          request-body-inspect-window: 4kb
+          response-body-minimal-inspect-size: 40kb
+          response-body-inspect-window: 16kb
+
+rule-files:
+  - /var/lib/suricata/rules/basic.rules
+  - /var/lib/suricata/rules/advanced.rules
