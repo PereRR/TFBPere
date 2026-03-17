@@ -1,0 +1,4 @@
+# MySQL data
+data/mysql/
+*.ibd
+*.log
