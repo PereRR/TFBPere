@@ -11,5 +11,5 @@ RUN apt-get update && apt-get install -y \
     tcpdump \
     && apt-get clean
 
-WORKDIR /attacks
+WORKDIR /atacs
 CMD ["/bin/bash"]

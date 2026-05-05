@@ -1,5 +1,3 @@
-version: "3.9"
-
 name: tfb-pereroca
 
 services:
@@ -144,6 +142,17 @@ services:
     networks:
       - monitoring_net
     restart: unless-stopped
+
+  detector:
+    image: alpine:latest
+    container_name: detector
+    volumes:
+      - ./logs:/var/log/project
+      - ./scripts:/scripts
+    command: sh /scripts/detect_attack.sh
+    networks:
+      - monitoring_net
+    restart: unless-stopped 
 
 networks:
   attacker_net:
