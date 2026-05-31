@@ -16,3 +16,11 @@ scrape_configs:
         labels:
           job: project_logs
           __path__: /var/log/project/**/*.log
+          
+  - job_name: detection_json
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: detection_json
+          __path__: /var/log/project/detection.json

@@ -2,15 +2,19 @@
 
 LEVEL="$1"
 
-if [[ "$LEVEL" != "apagat" && "$LEVEL" != "basic" && "$LEVEL" != "avançat" ]]; then
-  echo "Ús: ./scripts/set-defense-level.sh [apagat|basic|avançat]"
+BASE_DIR="/project"
+
+if [[ "$LEVEL" != "apagat" && "$LEVEL" != "basic" && "$LEVEL" != "advanced" ]]; then
+  echo "Ús: ./scripts/nivell-defensa.sh [apagat|basic|advanced]"
   exit 1
 fi
 
-cp "./configs/nginx/$LEVEL/default.conf" "./configs/nginx/active.conf"
+rm -f "$BASE_DIR/configs/nginx/active.conf"
 
-echo "DEFENSE_LEVEL=$LEVEL" > .env
+cp \
+"$BASE_DIR/configs/nginx/$LEVEL/default.conf" \
+"$BASE_DIR/configs/nginx/active.conf"
 
-docker compose restart reverse-proxy
+echo "DEFENSE_LEVEL=$LEVEL" > "$BASE_DIR/.env"
 
 echo "Nivell de defensa canviat a: $LEVEL"

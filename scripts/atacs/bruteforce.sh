@@ -7,3 +7,6 @@ for i in {1..20}; do
 done
 
 echo "[*] Atac finalitzat"
+
+
+

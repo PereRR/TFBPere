@@ -27,7 +27,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./configs/nginx/apagat/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./configs/nginx/active.conf:/etc/nginx/conf.d/default.conf:ro
       - ./logs/nginx:/var/log/nginx
     networks:
       - dmz_net
@@ -144,15 +144,34 @@ services:
     restart: unless-stopped
 
   detector:
-    image: alpine:latest
     container_name: detector
-    volumes:
-      - ./logs:/var/log/project
-      - ./scripts:/scripts
+    image: alpine:latest
     command: sh /scripts/detect_attack.sh
+    volumes:
+      - ./logs:/logs
+      - ./scripts:/scripts
+      - ./.env:/project/.env
+    restart: unless-stopped
     networks:
       - monitoring_net
-    restart: unless-stopped 
+
+  attack-panel:
+    build:
+      context: ./serveis/attack-panel
+    container_name: attack-panel
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./scripts/atacs:/atacs
+      - ./scripts:/project/scripts
+      - ./.env:/project/.env
+      - ./configs:/project/configs
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/project
+    networks:
+      - attacker_net
+      - dmz_net
+    restart: unless-stopped
 
 networks:
   attacker_net:

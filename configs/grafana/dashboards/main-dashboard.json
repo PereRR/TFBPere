@@ -34,27 +34,129 @@
           "mappings": [
             {
               "options": {
-                "0": {
-                  "color": "dark-green",
-                  "index": 1,
-                  "text": "Sistema Segur"
+                "Brute Force": {
+                  "color": "dark-orange",
+                  "index": 0
+                },
+                "Port Scanning": {
+                  "color": "dark-red",
+                  "index": 2
+                },
+                "SQL Injection": {
+                  "color": "semi-dark-purple",
+                  "index": 1
                 }
               },
               "type": "value"
-            },
-            {
-              "options": {
-                "from": 1,
-                "result": {
-                  "color": "dark-red",
-                  "index": 0,
-                  "text": "Atac Detectat"
-                },
-                "to": 99999
-              },
-              "type": "range"
             }
           ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "firstNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 100
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{job=\"detection_json\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "🚨 ULTIM ATAC DETECTAT 🚨",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "keepTime": false,
+            "regExp": "/.*Possible\\s+(?<Attack>.*?)\\s+des de.*/",
+            "replace": false,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "attack_result": true,
+              "defense_status": true,
+              "description": true,
+              "detected": true,
+              "id": true,
+              "labels": true,
+              "risk": true,
+              "script_action": true,
+              "security_level": true,
+              "source_ip": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "NewField": "Attack"
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Attack Type",
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -74,27 +176,27 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 0
       },
-      "id": 3,
+      "id": 5,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "none",
         "justifyMode": "center",
         "orientation": "horizontal",
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
-            "last"
+            "firstNotNull"
           ],
-          "fields": "",
+          "fields": "/.*/",
           "values": false
         },
         "showPercentChange": false,
         "text": {
           "titleSize": 50,
-          "valueSize": 100
+          "valueSize": 25
         },
         "textMode": "value",
         "wideLayout": true
@@ -108,12 +210,262 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=\"project_logs\"} |= \"ALERTA\" [30s])) or vector(0)",
+          "expr": "{job=\"detection_json\"}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "ESTAT DEL SISTEMA",
+      "title": "☝️ QUE PASSA? 🤓",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "source": "Line"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "attack_result": true,
+              "attack_type": true,
+              "defense_status": true,
+              "detected": true,
+              "id": true,
+              "labels": true,
+              "risk": true,
+              "script_action": true,
+              "security_level": true,
+              "source_ip": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Attack Type",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "dark-red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 10,
+        "x": 0,
+        "y": 8
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "firstNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 50,
+          "valueSize": 25
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{job=\"detection_json\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "⚔️ RESULTAT DE L'ATAC ⚔️",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "source": "Line"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "attack_result": false,
+              "attack_type": true,
+              "defense_status": true,
+              "description": true,
+              "detected": true,
+              "id": true,
+              "labels": true,
+              "risk": true,
+              "script_action": true,
+              "security_level": true,
+              "source_ip": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Attack Type",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "dark-red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 10,
+        "y": 8
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "firstNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 50,
+          "valueSize": 25
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{job=\"detection_json\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "⚠️ RISCOS ⚠️",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "source": "Line"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "attack_result": true,
+              "attack_type": true,
+              "defense_status": true,
+              "description": true,
+              "detected": true,
+              "id": true,
+              "labels": true,
+              "risk": false,
+              "script_action": true,
+              "security_level": true,
+              "source_ip": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
       "type": "stat"
     },
     {
@@ -130,22 +482,354 @@
           "mappings": [
             {
               "options": {
-                "Brute Force Login": {
-                  "color": "dark-orange",
-                  "index": 0
+                "advanced": {
+                  "index": 2,
+                  "text": "AVANÇAT"
                 },
-                "Port Scanning": {
-                  "color": "semi-dark-yellow",
-                  "index": 2
+                "apagat": {
+                  "index": 0,
+                  "text": "APAGAT"
                 },
-                "SQL Injection": {
-                  "color": "dark-red",
-                  "index": 1
+                "basic": {
+                  "index": 1,
+                  "text": "BASIC"
                 }
               },
               "type": "value"
             }
           ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "dark-red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "firstNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 50,
+          "valueSize": 50
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{job=\"detection_json\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "🛡️ NIVELL DE SEGURETAT 🛡️",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "source": "Line"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "attack_result": true,
+              "attack_type": true,
+              "defense_status": true,
+              "description": true,
+              "detected": true,
+              "id": true,
+              "labels": true,
+              "risk": true,
+              "script_action": true,
+              "security_level": false,
+              "source_ip": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Attack Type",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "dark-red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 13,
+        "x": 0,
+        "y": 15
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "firstNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 50,
+          "valueSize": 25
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{job=\"detection_json\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "‼️ ACCIÓ REALITZADA ‼️",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "source": "Line"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "attack_result": true,
+              "attack_type": true,
+              "defense_status": true,
+              "description": true,
+              "detected": true,
+              "id": true,
+              "labels": true,
+              "risk": true,
+              "script_action": false,
+              "security_level": true,
+              "source_ip": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Attack Type",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "dark-red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 13,
+        "y": 15
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "firstNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 50,
+          "valueSize": 25
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{job=\"detection_json\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "🛡️ RESPOSTA DE LA DEFENSA 🛡️",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "source": "Line"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Line": true,
+              "Time": true,
+              "attack_result": true,
+              "attack_type": true,
+              "description": true,
+              "detected": true,
+              "id": true,
+              "labels": true,
+              "risk": true,
+              "script_action": true,
+              "security_level": true,
+              "source_ip": true,
+              "timestamp": true,
+              "tsNs": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -160,31 +844,97 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Descripció"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 268
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Acció"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 327
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IP d'origen"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 114
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tipus"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 147
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "NIvell de Seguretat"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data de l'atac"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 241
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
+        "w": 24,
+        "x": 0,
+        "y": 22
       },
-      "id": 2,
+      "id": 1,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "firstNotNull"
-          ],
-          "fields": "/.*/",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Acció"
+          }
+        ]
       },
       "pluginVersion": "12.4.1",
       "targets": [
@@ -195,21 +945,18 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{job=\"project_logs\"} |= \"ALERTA\"",
+          "expr": "{job=\"detection_json\"}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "TIPUS D’ATAC DETECTAT",
+      "title": "⚠️ ALERTES DE SEGURETAT ⚠️",
       "transformations": [
         {
           "id": "extractFields",
           "options": {
             "delimiter": ",",
-            "format": "regexp",
-            "keepTime": false,
-            "regExp": "/.*Possible\\s+(?<Attack>.*?)\\s+des de.*/",
-            "replace": false,
+            "format": "json",
             "source": "Line"
           }
         },
@@ -219,6 +966,7 @@
             "excludeByName": {
               "Line": true,
               "Time": true,
+              "detected": true,
               "id": true,
               "labels": true,
               "tsNs": true
@@ -226,55 +974,18 @@
             "includeByName": {},
             "indexByName": {},
             "renameByName": {
-              "NewField": "Attack"
+              "attack_type": "Tipus",
+              "description": "Descripció",
+              "risk": "Riscos",
+              "script_action": "Acció",
+              "security_level": "NIvell de Seguretat",
+              "source_ip": "IP d'origen",
+              "timestamp": "Data de l'atac"
             }
           }
         }
       ],
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 6,
-        "y": 8
-      },
-      "id": 1,
-      "options": {
-        "dedupStrategy": "none",
-        "enableInfiniteScrolling": false,
-        "enableLogDetails": true,
-        "showControls": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "unwrappedColumns": false,
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "12.4.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "direction": "backward",
-          "editorMode": "code",
-          "expr": "{job=\"project_logs\"} |= \"ALERTA\"",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "⚠️ ALERTES DE SEGURETAT ⚠️",
-      "type": "logs"
+      "type": "table"
     }
   ],
   "preload": false,
@@ -292,6 +1003,6 @@
   "timezone": "browser",
   "title": "Pere Roca TFB Alertes Seguretat",
   "uid": "adl8l69",
-  "version": 13,
+  "version": 18,
   "weekStart": ""
 }
